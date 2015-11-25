@@ -158,29 +158,6 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
     public void onResume()
     {
         super.onResume();
-
-        if( bandClient != null )
-        {
-            if(bandClient.getSensorManager().getCurrentHeartRateConsent() != UserConsent.GRANTED) {
-                // user has not consented, request it      // the calling class is both an Activity and implements      // HeartRateConsentListener
-                bandClient.getSensorManager().requestHeartRateConsent( getActivity(), heartRateConsentListener );
-            }
-            else
-            {
-                startHRListener();
-            }
-
-            startUVListener();
-
-            startSkinTemperatureListener();
-
-            startCaloriesListener();
-            startPedometerListener();
-            startDistanceListener();
-            startAccelerometerListener();
-            startContactListener();
-            startGyroscopeListener();
-        }
     }
 
     public void onStop()
