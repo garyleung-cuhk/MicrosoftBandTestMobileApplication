@@ -1,3 +1,18 @@
+/*Copyright (C) 2015  bdda
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>*/
+
 package bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.storageHandler.impl;
 
 import android.content.ContentValues;
@@ -597,5 +612,38 @@ public class MyDBHandler extends SQLiteOpenHelper implements StorageHandler
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);
+    }
+
+    public ArrayList<HeartRate> getHeartRatesInLimits( int number )
+    {
+        ArrayList<HeartRate> heartRateList = new ArrayList<HeartRate>();
+        HeartRate tmpHeartRate = null;
+        String sql = "SELECT * FROM HeartRate ORDER BY timestamp DESC LIMIT " + number;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery( sql, null );
+
+        if( cursor.moveToFirst() )
+        {
+            do
+            {
+                tmpHeartRate = new HeartRate();
+
+                tmpHeartRate.setId(Integer.parseInt(cursor.getString(0)));
+                tmpHeartRate.setHr(Integer.parseInt(cursor.getString(1)));
+
+                if( cursor.getString( 2 ) != null )
+                {
+                    tmpHeartRate.setIsContact(Integer.parseInt(cursor.getString(2)));
+                }
+
+
+                tmpHeartRate.setTimestamp(Long.parseLong(cursor.getString(3)));
+
+                heartRateList.add( tmpHeartRate );
+            }while( cursor.moveToNext() );
+        }
+
+        return heartRateList;
     }
 }

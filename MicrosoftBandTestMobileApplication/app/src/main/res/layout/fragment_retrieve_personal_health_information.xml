@@ -90,7 +90,17 @@ android:id="@+id/scrollView" >
                     android:layout_gravity="bottom" />
 
             </TableRow>
-
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <com.jjoe64.graphview.GraphView
+                    android:layout_span="2"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dip"
+                    android:id="@+id/graph"
+                    app:seriesType="line"
+                    app:seriesColor="#ee0000"/>
+            </TableRow>
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

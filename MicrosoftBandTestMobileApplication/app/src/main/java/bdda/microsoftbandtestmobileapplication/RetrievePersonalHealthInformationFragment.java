@@ -2,12 +2,16 @@ package bdda.microsoftbandtestmobileapplication;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 import com.microsoft.band.BandClient;
 import com.microsoft.band.BandClientManager;
 import com.microsoft.band.BandException;
@@ -36,6 +40,8 @@ import com.microsoft.band.sensors.BandUVEvent;
 import com.microsoft.band.sensors.BandUVEventListener;
 import com.microsoft.band.sensors.HeartRateConsentListener;
 import com.microsoft.band.sensors.SampleRate;
+
+import java.util.ArrayList;
 
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Accelerometer;
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Calories;
@@ -70,6 +76,9 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
     private TextView contact;
     private TextView gyroscope;
 
+    private GraphView graph;
+    private final Handler handler  = new Handler();
+    private LineGraphSeries<DataPoint> seriesOne;
     /*
         Examples for accessing Microsoft Band Sensor
      */
@@ -110,6 +119,15 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
         dbHandler = new MyDBHandler( getActivity().getApplicationContext() );
 
         new LoadBandInformationTask().execute();
+
+        graph = (GraphView) rootView.findViewById(R.id.graph);
+        seriesOne = new LineGraphSeries<DataPoint>();
+
+        graph.addSeries(seriesOne);
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinY(40);
+        graph.getViewport().setMaxY(130);
+        graph.getViewport().setScrollable(true);
 
         return rootView;
     }
@@ -158,6 +176,32 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
     public void onResume()
     {
         super.onResume();
+
+        timerOne = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                final DataPoint tmpDataPoint = generateSingleData();
+                if( getActivity() == null )
+                {
+                    return;
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if( tmpDataPoint != null )
+                        {
+                            seriesOne.appendData( tmpDataPoint, true, 100);
+                        }
+                    }
+                });
+
+                handler.postDelayed( this, 1000 );
+            }
+        };
+
+        handler.postDelayed(timerOne, 0);
     }
 
     public void onStop()
@@ -198,6 +242,25 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
         {
             timerOne = null;
         }
+    }
+
+    private DataPoint generateSingleData()
+    {
+        int count = 1;
+        DataPoint[] values = new DataPoint[count];
+        ArrayList<HeartRate> heartRateList = new ArrayList<HeartRate>();
+        heartRateList = dbHandler.getHeartRatesInLimits( count );
+
+        for( int i = 0; i < heartRateList.size(); i++ )
+        {
+            double y = ( double ) heartRateList.get( i ).getHr();
+            double x = ( double ) ( heartRateList.get( i ).getId() );
+
+            DataPoint point = new DataPoint( x, y );
+            values[count - i - 1] = point;
+        }
+
+        return values[0];
     }
 
     private BandHeartRateEventListener heartRateEventListener = new BandHeartRateEventListener() {
