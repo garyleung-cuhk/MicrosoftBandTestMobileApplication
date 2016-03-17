@@ -23,6 +23,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
+import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Altimeter;
+import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.AmbientLight;
+import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Barometer;
+import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Gsr;
+import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.RRInterval;
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.storageHandler.StorageHandler;
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Accelerometer;
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Calories;
@@ -54,10 +59,10 @@ public class MyDBHandler extends SQLiteOpenHelper implements StorageHandler
 
         // For Heart Rate
         String createHeartRateDBSql = "CREATE TABLE IF NOT EXISTS HeartRate ( " +
-                             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                             "hr INTEGER, " +
-                             "contact INTEGER, " +
-                             "timestamp INTEGER )";
+                                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                        "hr INTEGER, " +
+                                        "heartRateQuality TEXT, " +
+                                        "timestamp INTEGER )";
 
 
         db.execSQL(createHeartRateDBSql);
@@ -137,6 +142,50 @@ public class MyDBHandler extends SQLiteOpenHelper implements StorageHandler
         String initUserIdDBSql = "INSERT Into UserId( userId, timestamp ) VALUES( '', 0 )";
 
         db.execSQL(initUserIdDBSql);
+
+        String createGsrDBSql = "CREATE TABLE IF NOT EXISTS Gsr ( " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "resistance INTEGER, " +
+                "timestamp INTEGER )";
+
+        db.execSQL(createGsrDBSql);
+
+        String createRRIntervalDBSql = "CREATE TABLE IF NOT EXISTS RRInterval ( " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "interval TEXT, " +
+                "timestamp INTEGER )";
+
+        db.execSQL(createRRIntervalDBSql);
+
+        String createAmbientLightDBSql = "CREATE TABLE IF NOT EXISTS AmbientLight ( " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "brightness INTEGER, " +
+                "timestamp INTEGER )";
+
+        db.execSQL(createAmbientLightDBSql);
+
+        String createBarometerDBSql = "CREATE TABLE IF NOT EXISTS Barometer ( " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "airPressure TEXT, " +
+                "temperature TEXT, " +
+                "timestamp INTEGER )";
+
+        db.execSQL(createBarometerDBSql);
+
+        String createAltimeterDBSql = "CREATE TABLE IF NOT EXISTS Altimeter ( " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "flightsAscended TEXT, " +
+                "flightsDescended TEXT, " +
+                "rate TEXT, " +
+                "steppingGain TEXT, " +
+                "steppingLoss TEXT, " +
+                "stepsAscended TEXT, " +
+                "stepsDescended TEXT, " +
+                "totalGain TEXT, " +
+                "totalLoss TEXT, " +
+                "timestamp INTEGER )";
+
+        db.execSQL(createAltimeterDBSql);
     }
 
     @Override
@@ -174,6 +223,27 @@ public class MyDBHandler extends SQLiteOpenHelper implements StorageHandler
         dropDBSql = "DROP TABLE IF EXISTS Calories";
 
         db.execSQL(dropDBSql);
+
+        dropDBSql = "DROP TABLE IF EXISTS Gsr";
+
+        db.execSQL(dropDBSql);
+
+        dropDBSql = "DROP TABLE IF EXISTS RRInterval";
+
+        db.execSQL(dropDBSql);
+
+        dropDBSql = "DROP TABLE IF EXISTS AmbientLight";
+
+        db.execSQL(dropDBSql);
+
+        dropDBSql = "DROP TABLE IF EXISTS Barometer";
+
+        db.execSQL(dropDBSql);
+
+        dropDBSql = "DROP TABLE IF EXISTS Altimeter";
+
+        db.execSQL(dropDBSql);
+
         this.onCreate(db);
     }
 
@@ -182,7 +252,7 @@ public class MyDBHandler extends SQLiteOpenHelper implements StorageHandler
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("hr", heartRate.getHr());
-        values.put( "contact", heartRate.isContact() );
+        values.put( "heartRateQuality", heartRate.getHeartRateQuality() );
         values.put("timestamp", heartRate.getTimestamp());
 
         db.insert("HeartRate", null, values);
@@ -279,6 +349,65 @@ public class MyDBHandler extends SQLiteOpenHelper implements StorageHandler
         db.insert("Calories", null, values);
     }
 
+    public void addGsr( Gsr gsr )
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put( "resistance", gsr.getResistance() );
+        values.put( "timestamp", gsr.getTimestamp() );
+
+        db.insert( "Gsr", null, values );
+    }
+
+    public void addRRInterval( RRInterval rrInterval )
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put( "interval", rrInterval.getInterval() );
+        values.put( "timestamp", rrInterval.getTimestamp() );
+
+        db.insert( "RRInterval", null, values );
+    }
+
+    public void addAmbientLight( AmbientLight ambientLight )
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put( "brightness", ambientLight.getBrightness() );
+        values.put( "timestamp", ambientLight.getTimestamp() );
+
+        db.insert( "AmbientLight", null, values );
+    }
+
+    public void addBarometer( Barometer barometer )
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put( "airPressure", barometer.getAirPressure() );
+        values.put( "temperature", barometer.getTemperature() );
+        values.put( "timestamp", barometer.getTimestamp() );
+
+        db.insert( "Barometer", null, values );
+    }
+
+    public void addAltimeter( Altimeter altimeter )
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put( "flightsAscended", altimeter.getFlightsAscended() );
+        values.put( "flightsDescended", altimeter.getFlightsDescended() );
+        values.put( "rate", altimeter.getRate() );
+        values.put( "steppingGain", altimeter.getSteppingGain() );
+        values.put( "steppingLoss", altimeter.getSteppingLoss() );
+        values.put( "stepsAscended", altimeter.getStepsAscended() );
+        values.put( "stepsDescended", altimeter.getStepsDescended() );
+        values.put( "totalGain", altimeter.getTotalGain() );
+        values.put( "totalLoss", altimeter.getTotalLoss() );
+        values.put( "timestamp", altimeter.getTimestamp() );
+
+        db.insert( "Altimeter", null, values );
+    }
+
     public ArrayList<HeartRate> getOldHeartRatesInOffset( int offset )
     {
         ArrayList<HeartRate> heartRateList = new ArrayList<HeartRate>();
@@ -297,14 +426,7 @@ public class MyDBHandler extends SQLiteOpenHelper implements StorageHandler
                 tmpHeartRate.setId(Integer.parseInt(cursor.getString(0)));
                 tmpHeartRate.setHr(Integer.parseInt(cursor.getString(1)));
 
-                if( cursor.getString( 2 ) != null )
-                {
-                    tmpHeartRate.setIsContact(Integer.parseInt(cursor.getString(2)));
-                }
-                else
-                {
-                    tmpHeartRate.setIsContact( 0 );
-                }
+                tmpHeartRate.setHeartRateQuality(cursor.getString(2));
 
 
                 tmpHeartRate.setTimestamp(Long.parseLong(cursor.getString(3)));
@@ -542,6 +664,150 @@ public class MyDBHandler extends SQLiteOpenHelper implements StorageHandler
         return caloriesList;
     }
 
+    public ArrayList<Gsr> getOldGsrsInOffset(int offset)
+    {
+        ArrayList<Gsr> gsrList = new ArrayList<Gsr>();
+        Gsr tmpGsr = null;
+        String sql = "SELECT * FROM Gsr ORDER BY timestamp DESC LIMIT -1 OFFSET " + offset;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        if( cursor.moveToFirst() )
+        {
+            do
+            {
+                tmpGsr = new Gsr();
+
+                tmpGsr.setId(Integer.parseInt(cursor.getString(0)));
+                tmpGsr.setResistance(cursor.getInt(1));
+
+                tmpGsr.setTimestamp(Long.parseLong(cursor.getString(2)));
+
+                gsrList.add(tmpGsr);
+            }while( cursor.moveToNext() );
+        }
+
+        return gsrList;
+    }
+
+    public ArrayList<RRInterval> getOldRRIntervalsInOffset(int offset)
+    {
+        ArrayList<RRInterval> rrIntervalList = new ArrayList<RRInterval>();
+        RRInterval tmpRRInterval = null;
+        String sql = "SELECT * FROM RRInterval ORDER BY timestamp DESC LIMIT -1 OFFSET " + offset;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        if( cursor.moveToFirst() )
+        {
+            do
+            {
+                tmpRRInterval = new RRInterval();
+
+                tmpRRInterval.setId(Integer.parseInt(cursor.getString(0)));
+                tmpRRInterval.setInterval(cursor.getString(1));
+
+                tmpRRInterval.setTimestamp(Long.parseLong(cursor.getString(2)));
+
+                rrIntervalList.add(tmpRRInterval);
+            }while( cursor.moveToNext() );
+        }
+
+        return rrIntervalList;
+    }
+
+    public ArrayList<AmbientLight> getOldAmbientLightInOffset( int offset )
+    {
+        ArrayList<AmbientLight> ambientLightList = new ArrayList<AmbientLight>();
+        AmbientLight tmpAmbientLight = null;
+        String sql = "SELECT * FROM AmbientLight ORDER BY timestamp DESC LIMIT -1 OFFSET " + offset;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        if( cursor.moveToFirst() )
+        {
+            do
+            {
+                tmpAmbientLight = new AmbientLight();
+
+                tmpAmbientLight.setId(Integer.parseInt(cursor.getString(0)));
+                tmpAmbientLight.setBrightness(cursor.getInt(1));
+
+                tmpAmbientLight.setTimestamp(Long.parseLong(cursor.getString(2)));
+
+                ambientLightList.add(tmpAmbientLight);
+            }while( cursor.moveToNext() );
+        }
+
+        return ambientLightList;
+    }
+
+    public ArrayList<Barometer> getOldBarometersInOffset(int offset)
+    {
+        ArrayList<Barometer> barometerList = new ArrayList<Barometer>();
+        Barometer tmpBarometer = null;
+        String sql = "SELECT * FROM Barometer ORDER BY timestamp DESC LIMIT -1 OFFSET " + offset;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        if( cursor.moveToFirst() )
+        {
+            do
+            {
+                tmpBarometer = new Barometer();
+
+                tmpBarometer.setId(Integer.parseInt(cursor.getString(0)));
+                tmpBarometer.setAirPressure(Double.toString(cursor.getDouble(1)));
+                tmpBarometer.setTemperature(Double.toString(cursor.getDouble(2)));
+
+                tmpBarometer.setTimestamp(Long.parseLong(cursor.getString(3)));
+
+                barometerList.add(tmpBarometer);
+            }while( cursor.moveToNext() );
+        }
+
+        return barometerList;
+    }
+
+    public ArrayList<Altimeter> getOldAltimetersInOffset(int offset)
+    {
+        ArrayList<Altimeter> altimeterList = new ArrayList<Altimeter>();
+        Altimeter tmpAltimeter = null;
+        String sql = "SELECT * FROM Altimeter ORDER BY timestamp DESC LIMIT -1 OFFSET " + offset;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        if( cursor.moveToFirst() )
+        {
+            do
+            {
+                tmpAltimeter = new Altimeter();
+
+                tmpAltimeter.setId(Integer.parseInt(cursor.getString(0)));
+                tmpAltimeter.setFlightsAscended(Long.toString(cursor.getLong(1)));
+                tmpAltimeter.setFlightsDescended(Long.toString(cursor.getLong(2)));
+                tmpAltimeter.setRate(Float.toString(cursor.getFloat(3)));
+                tmpAltimeter.setSteppingGain(Long.toString(cursor.getLong(4)));
+                tmpAltimeter.setSteppingLoss(Long.toString(cursor.getLong(5)));
+                tmpAltimeter.setStepsAscended(Long.toString(cursor.getLong(6)));
+                tmpAltimeter.setStepsDescended(Long.toString(cursor.getLong(7)));
+                tmpAltimeter.setTotalGain(Long.toString(cursor.getLong(8)));
+                tmpAltimeter.setTotalLoss(Long.toString(cursor.getLong(9)));
+
+                tmpAltimeter.setTimestamp(Long.parseLong(cursor.getString( 10 )));
+
+                altimeterList.add(tmpAltimeter);
+            }while( cursor.moveToNext() );
+        }
+
+        return altimeterList;
+    }
+
     public void removeAllHeartRateBelowId( int id )
     {
         String sql = "DELETE FROM HeartRate WHERE id <= " + id;
@@ -614,6 +880,46 @@ public class MyDBHandler extends SQLiteOpenHelper implements StorageHandler
         db.execSQL(sql);
     }
 
+    public void removeAllGsrBelowId( int id )
+    {
+        String sql = "DELETE FROM Gsr WHERE id <= " + id;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL( sql );
+    }
+
+    public void removeAllRRIntervalBelowId( int id )
+    {
+        String sql = "DELETE FROM RRInterval WHERE id <= " + id;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL( sql );
+    }
+
+    public void removeAllAmbientLightBelowId( int id )
+    {
+        String sql = "DELETE FROM AmbientLight WHERE id <= " + id;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL( sql );
+    }
+
+    public void removeAllBarometerBelowId( int id )
+    {
+        String sql = "DELETE FROM Barometer WHERE id <= " + id;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL( sql );
+    }
+
+    public void removeAllAltimeterBelowId( int id )
+    {
+        String sql = "DELETE FROM Altimeter WHERE id <= " + id;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL( sql );
+    }
+
     public ArrayList<HeartRate> getHeartRatesInLimits( int number )
     {
         ArrayList<HeartRate> heartRateList = new ArrayList<HeartRate>();
@@ -632,10 +938,7 @@ public class MyDBHandler extends SQLiteOpenHelper implements StorageHandler
                 tmpHeartRate.setId(Integer.parseInt(cursor.getString(0)));
                 tmpHeartRate.setHr(Integer.parseInt(cursor.getString(1)));
 
-                if( cursor.getString( 2 ) != null )
-                {
-                    tmpHeartRate.setIsContact(Integer.parseInt(cursor.getString(2)));
-                }
+                tmpHeartRate.setHeartRateQuality(cursor.getString(2));
 
 
                 tmpHeartRate.setTimestamp(Long.parseLong(cursor.getString(3)));
