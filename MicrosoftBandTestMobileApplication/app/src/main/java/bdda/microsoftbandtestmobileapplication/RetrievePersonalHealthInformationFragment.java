@@ -19,21 +19,32 @@ import com.microsoft.band.BandIOException;
 import com.microsoft.band.BandInfo;
 import com.microsoft.band.BandPendingResult;
 import com.microsoft.band.ConnectionState;
+import com.microsoft.band.InvalidBandVersionException;
 import com.microsoft.band.UserConsent;
 import com.microsoft.band.sensors.BandAccelerometerEvent;
 import com.microsoft.band.sensors.BandAccelerometerEventListener;
+import com.microsoft.band.sensors.BandAltimeterEvent;
+import com.microsoft.band.sensors.BandAltimeterEventListener;
+import com.microsoft.band.sensors.BandAmbientLightEvent;
+import com.microsoft.band.sensors.BandAmbientLightEventListener;
+import com.microsoft.band.sensors.BandBarometerEvent;
+import com.microsoft.band.sensors.BandBarometerEventListener;
 import com.microsoft.band.sensors.BandCaloriesEvent;
 import com.microsoft.band.sensors.BandCaloriesEventListener;
 import com.microsoft.band.sensors.BandContactEvent;
 import com.microsoft.band.sensors.BandContactEventListener;
 import com.microsoft.band.sensors.BandDistanceEvent;
 import com.microsoft.band.sensors.BandDistanceEventListener;
+import com.microsoft.band.sensors.BandGsrEvent;
+import com.microsoft.band.sensors.BandGsrEventListener;
 import com.microsoft.band.sensors.BandGyroscopeEvent;
 import com.microsoft.band.sensors.BandGyroscopeEventListener;
 import com.microsoft.band.sensors.BandHeartRateEvent;
 import com.microsoft.band.sensors.BandHeartRateEventListener;
 import com.microsoft.band.sensors.BandPedometerEvent;
 import com.microsoft.band.sensors.BandPedometerEventListener;
+import com.microsoft.band.sensors.BandRRIntervalEvent;
+import com.microsoft.band.sensors.BandRRIntervalEventListener;
 import com.microsoft.band.sensors.BandSkinTemperatureEvent;
 import com.microsoft.band.sensors.BandSkinTemperatureEventListener;
 import com.microsoft.band.sensors.BandUVEvent;
@@ -44,12 +55,17 @@ import com.microsoft.band.sensors.SampleRate;
 import java.util.ArrayList;
 
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Accelerometer;
+import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Altimeter;
+import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.AmbientLight;
+import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Barometer;
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Calories;
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Contact;
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Distance;
+import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Gsr;
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Gyroscope;
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.HeartRate;
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.Pedometer;
+import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.RRInterval;
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.SkinTemperature;
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.dto.UV;
 import bdda.microsoftbandtestmobileapplication.bdda.microsoftbandtestmobileapplication.storageHandler.impl.MyDBHandler;
@@ -75,6 +91,13 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
 
     private TextView contact;
     private TextView gyroscope;
+
+    private TextView ambientLight;
+    private TextView barometer;
+    private TextView altimeter;
+
+    private TextView gsr;
+    private TextView rrInterval;
 
     private GraphView graph;
     private final Handler handler  = new Handler();
@@ -115,6 +138,13 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
         accelerometer = ( TextView ) rootView.findViewById( R.id.accelerometer );
         contact = ( TextView ) rootView.findViewById( R.id.contact );
         gyroscope = ( TextView ) rootView.findViewById( R.id.gyroscope );
+
+        ambientLight = ( TextView ) rootView.findViewById( R.id.ambientLight );
+        barometer = ( TextView ) rootView.findViewById( R.id.barometer );
+        altimeter = ( TextView ) rootView.findViewById( R.id.altimeter);
+
+        gsr = ( TextView ) rootView.findViewById( R.id.gsr );
+        rrInterval = ( TextView ) rootView.findViewById( R.id.rrInterval );
 
         dbHandler = new MyDBHandler( getActivity().getApplicationContext() );
 
@@ -160,6 +190,11 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
                     startAccelerometerListener();
                     startContactListener();
                     startGyroscopeListener();
+                    startAmbientLightListener();
+                    startAltimeterListener();
+                    startBarometerListener();
+                    startGsrListener();
+                    startRRIntervalListener();
                 }
             }
             catch(InterruptedException ex)
@@ -219,6 +254,13 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
             stopAccelerometerListener();
             stopContactListener();
             stopGyroscopeListener();
+
+            stopAmbientLightListener();
+            stopBarometerListener();
+            stopAltimeterListener();
+
+            stopGsrListener();
+            stopRRIntervalListener();
         }
         if( timerOne != null )
         {
@@ -236,6 +278,13 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
             stopSkinListener();
             stopUVListener();
             stopCaloriesListener();
+
+            stopAmbientLightListener();
+            stopBarometerListener();
+            stopAltimeterListener();
+
+            stopGsrListener();
+            stopRRIntervalListener();
         }
 
         if( timerOne != null )
@@ -570,6 +619,145 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
         }
     }
 
+    public void stopGsrListener()
+    {
+        try
+        {
+            bandClient.getSensorManager().unregisterGsrEventListener(gsrEventListener);
+        }
+        catch( BandIOException e )
+        {
+
+        }
+    }
+
+    public void stopRRIntervalListener()
+    {
+        try
+        {
+            bandClient.getSensorManager().unregisterRRIntervalEventListener(rrIntervalEventListener);
+        }
+        catch( BandIOException e )
+        {
+
+        }
+    }
+    public void startGsrListener()
+    {
+        try
+        {
+            bandClient.getSensorManager().registerGsrEventListener(gsrEventListener);
+        }
+        catch( InvalidBandVersionException e )
+        {
+
+        }
+        catch( BandException e )
+        {
+
+        }
+    }
+
+    public void startRRIntervalListener()
+    {
+        try
+        {
+            bandClient.getSensorManager().registerRRIntervalEventListener(rrIntervalEventListener);
+        }
+        catch( InvalidBandVersionException e )
+        {
+
+        }
+        catch( BandException e )
+        {
+
+        }
+    }
+
+    public void stopAmbientLightListener()
+    {
+        try
+        {
+            bandClient.getSensorManager().unregisterAmbientLightEventListener(ambientLightEventListener);
+        }
+        catch( BandIOException e )
+        {
+
+        }
+    }
+
+    public void stopBarometerListener()
+    {
+        try
+        {
+            bandClient.getSensorManager().unregisterBarometerEventListener(barometerEventListener);
+        }
+        catch( BandIOException e )
+        {
+
+        }
+    }
+
+    public void stopAltimeterListener()
+    {
+        try
+        {
+            bandClient.getSensorManager().unregisterAltimeterEventListener(altimeterEventListener);
+        }
+        catch( BandIOException e )
+        {
+
+        }
+    }
+
+    public void startAmbientLightListener()
+    {
+        try
+        {
+            bandClient.getSensorManager().registerAmbientLightEventListener(ambientLightEventListener);
+        }
+        catch( InvalidBandVersionException e )
+        {
+
+        }
+        catch( BandException e )
+        {
+
+        }
+    }
+
+    public void startBarometerListener()
+    {
+        try
+        {
+            bandClient.getSensorManager().registerBarometerEventListener(barometerEventListener);
+        }
+        catch( InvalidBandVersionException e )
+        {
+
+        }
+        catch( BandException e )
+        {
+
+        }
+    }
+
+    public void startAltimeterListener()
+    {
+        try
+        {
+            bandClient.getSensorManager().registerAltimeterEventListener(altimeterEventListener);
+        }
+        catch( InvalidBandVersionException e )
+        {
+
+        }
+        catch( BandException e )
+        {
+
+        }
+    }
+
     private BandPedometerEventListener pedometerEventListener = new BandPedometerEventListener() {
         @Override
         public void onBandPedometerChanged( BandPedometerEvent bandPedometerEvent )
@@ -626,7 +814,7 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
         public void onBandContactChanged(BandContactEvent bandContactEvent) {
             if (bandContactEvent != null) {
                 Contact tmpContact = new Contact();
-                tmpContact.setContact( bandContactEvent.getContactState().toString() );
+                tmpContact.setContact(bandContactEvent.getContactState().toString());
                 tmpContact.setTimestamp(bandContactEvent.getTimestamp());
 
                 dbHandler.addContact(tmpContact);
@@ -669,6 +857,133 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
             }
         }
     };
+
+    private BandAmbientLightEventListener ambientLightEventListener = new BandAmbientLightEventListener() {
+        @Override
+        public void onBandAmbientLightChanged(BandAmbientLightEvent bandAmbientLightEvent) {
+            if (bandAmbientLightEvent != null) {
+                updateAmbientLightTextView(bandAmbientLightEvent.toString());
+                AmbientLight tmpAmbientLight = new AmbientLight();
+                tmpAmbientLight.setBrightness(bandAmbientLightEvent.getBrightness());
+                tmpAmbientLight.setTimestamp(bandAmbientLightEvent.getTimestamp());
+                dbHandler.addAmbientLight(tmpAmbientLight);
+            }
+        }
+    };
+
+    private BandBarometerEventListener barometerEventListener = new BandBarometerEventListener() {
+        @Override
+        public void onBandBarometerChanged(BandBarometerEvent bandBarometerEvent) {
+            if (barometerEventListener != null) {
+                updateBarometerTextView( bandBarometerEvent.toString() );
+                Barometer tmpBarometer = new Barometer();
+                tmpBarometer.setAirPressure(Double.toString(bandBarometerEvent.getAirPressure()));
+                tmpBarometer.setTemperature(Double.toString(bandBarometerEvent.getTemperature()));
+                tmpBarometer.setTimestamp(bandBarometerEvent.getTimestamp());
+                dbHandler.addBarometer(tmpBarometer);
+            }
+        }
+    };
+
+    private BandAltimeterEventListener altimeterEventListener = new BandAltimeterEventListener() {
+        @Override
+        public void onBandAltimeterChanged(BandAltimeterEvent bandAltimeterEvent) {
+            if (bandAltimeterEvent != null) {
+                updateAltimeterTextView( bandAltimeterEvent.toString() );
+                Altimeter tmpAltimeter = new Altimeter();
+                tmpAltimeter.setFlightsAscended(Long.toString(bandAltimeterEvent.getFlightsAscended()));
+                tmpAltimeter.setFlightsDescended(Long.toString(bandAltimeterEvent.getFlightsDescended()));
+                tmpAltimeter.setRate(Float.toString(bandAltimeterEvent.getRate()));
+                tmpAltimeter.setSteppingGain(Long.toString(bandAltimeterEvent.getSteppingGain()));
+                tmpAltimeter.setSteppingLoss(Long.toString(bandAltimeterEvent.getSteppingLoss()));
+                tmpAltimeter.setStepsAscended(Long.toString(bandAltimeterEvent.getStepsAscended()));
+                tmpAltimeter.setStepsDescended(Long.toString(bandAltimeterEvent.getStepsDescended()));
+                tmpAltimeter.setTotalGain(Long.toString(bandAltimeterEvent.getFlightsDescended()));
+                tmpAltimeter.setTotalLoss(Long.toString(bandAltimeterEvent.getFlightsDescended()));
+                tmpAltimeter.setTimestamp(bandAltimeterEvent.getTimestamp());
+                dbHandler.addAltimeter(tmpAltimeter);
+            }
+        }
+    };
+
+    private BandGsrEventListener gsrEventListener = new BandGsrEventListener() {
+        @Override
+        public void onBandGsrChanged(BandGsrEvent bandGsrEvent) {
+            if( bandGsrEvent != null )
+            {
+                Gsr tmpGsr = new Gsr();
+                tmpGsr.setResistance(bandGsrEvent.getResistance());
+                tmpGsr.setTimestamp(bandGsrEvent.getTimestamp());
+                updateGsrTextView(Integer.toString(tmpGsr.getResistance()) + " kohms");
+                dbHandler.addGsr(tmpGsr);
+            }
+        }
+    };
+
+    private BandRRIntervalEventListener rrIntervalEventListener = new BandRRIntervalEventListener() {
+        @Override
+        public void onBandRRIntervalChanged(BandRRIntervalEvent bandRRIntervalEvent) {
+            if( bandRRIntervalEvent != null )
+            {
+                RRInterval tmpRRInterval = new RRInterval();
+                tmpRRInterval.setInterval(Double.toString(bandRRIntervalEvent.getInterval()));
+                tmpRRInterval.setTimestamp(bandRRIntervalEvent.getTimestamp());
+                updateRRIntervalTextView(tmpRRInterval.getInterval() + " seconds");
+                dbHandler.addRRInterval(tmpRRInterval);
+            }
+        }
+    };
+
+    public void updateRRIntervalTextView( final String str )
+    {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                rrInterval.setText( str );
+            }
+        });
+    }
+
+    public void updateGsrTextView( final String str )
+    {
+        getActivity().runOnUiThread( new Runnable() {
+            @Override
+            public void run() {
+                gsr.setText( str );
+            }
+
+        });
+    }
+
+    public void updateAmbientLightTextView( final String str )
+    {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ambientLight.setText( str );
+            }
+        });
+    }
+
+    public void updateBarometerTextView( final String str )
+    {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                barometer.setText( str );
+            }
+        });
+    }
+
+    public void updateAltimeterTextView( final String str )
+    {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                altimeter.setText( str );
+            }
+        });
+    }
 
     private void updateDistanceTextView( final String str )
     {
