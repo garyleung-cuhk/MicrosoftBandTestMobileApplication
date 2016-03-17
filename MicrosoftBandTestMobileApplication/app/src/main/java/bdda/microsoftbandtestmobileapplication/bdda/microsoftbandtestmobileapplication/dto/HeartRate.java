@@ -4,12 +4,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by bdda on 2015-06-10.
+ * Created by gary on 2015-06-10.
  */
 public class HeartRate {
     private Integer id;
     private Integer hr;
-    private Integer isContact;
+    private String heartRateQuality;
     private String userId;
     private Long timestamp;
 
@@ -29,12 +29,14 @@ public class HeartRate {
         this.hr = hr;
     }
 
-    public Integer isContact() {
-        return isContact;
+    public String getHeartRateQuality()
+    {
+        return this.heartRateQuality;
     }
 
-    public void setIsContact( Integer isContact) {
-        this.isContact = isContact;
+    public void setHeartRateQuality( String heartRateQuality )
+    {
+        this.heartRateQuality = heartRateQuality;
     }
 
     public Long getTimestamp() {
@@ -63,7 +65,7 @@ public class HeartRate {
             jsonObj.put( "id", this.getId() );
             jsonObj.put( "hr", this.getHr() );
             jsonObj.put( "userId", this.getUserId() );
-            jsonObj.put( "contact", this.isContact() );
+            jsonObj.put( "heartRateQuality", this.getHeartRateQuality() );
             jsonObj.put( "timestamp", this.getTimestamp() );
         }
         catch( JSONException e )
