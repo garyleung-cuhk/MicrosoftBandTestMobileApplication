@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
@@ -102,6 +104,23 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
     private GraphView graph;
     private final Handler handler  = new Handler();
     private LineGraphSeries<DataPoint> seriesOne;
+
+    private Switch uvSwitch;
+    private Switch skinTemperatureSwitch;
+    private Switch heartRateSwitch;
+    private Switch pedoemeterSwitch;
+    private Switch distanceSwitch;
+    private Switch accelerometerSwitch;
+    private Switch gyroscopeSwitch;
+    private Switch contactSwitch;
+    private Switch caloriesSwitch;
+    private Switch gsrSwitch;
+    private Switch altimeterSwitch;
+    private Switch ambientLightSwitch;
+    private Switch baroemterSwitch;
+    private Switch rrInteralSwitch;
+
+
     /*
         Examples for accessing Microsoft Band Sensor
      */
@@ -159,6 +178,216 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
         graph.getViewport().setMaxY(130);
         graph.getViewport().setScrollable(true);
 
+        uvSwitch = ( Switch ) rootView.findViewById(R.id.uvSwitch);
+        skinTemperatureSwitch = ( Switch ) rootView.findViewById(R.id.skinTemperatureSwitch);
+        heartRateSwitch = ( Switch ) rootView.findViewById(R.id.heartRateSwitch);
+        pedoemeterSwitch = ( Switch ) rootView.findViewById(R.id.pedometerSwitch);
+        distanceSwitch = ( Switch ) rootView.findViewById(R.id.distanceSwitch);
+        accelerometerSwitch = ( Switch ) rootView.findViewById(R.id.accelerometerSwitch);
+        gyroscopeSwitch = ( Switch ) rootView.findViewById(R.id.gyroscopeSwitch);
+        contactSwitch = ( Switch ) rootView.findViewById(R.id.contactSwitch);
+        caloriesSwitch = ( Switch ) rootView.findViewById(R.id.caloriesSwitch);
+        gsrSwitch = ( Switch ) rootView.findViewById(R.id.gsrSwitch);
+        altimeterSwitch = ( Switch ) rootView.findViewById(R.id.altimeterSwitch);
+        ambientLightSwitch = ( Switch ) rootView.findViewById(R.id.ambientLightSwitch);
+        baroemterSwitch = ( Switch ) rootView.findViewById(R.id.barometerSwitch);
+        rrInteralSwitch = ( Switch ) rootView.findViewById(R.id.rrIntervalSwitch);
+
+        uvSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked ) {
+                if( isChecked )
+                {
+                    startUVListener();
+                }
+                else
+                {
+                    stopUVListener();
+                }
+            }
+        });
+
+        skinTemperatureSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked ) {
+                if( isChecked )
+                {
+                    startSkinTemperatureListener();
+                }
+                else
+                {
+                    stopSkinTemperatureListener();
+                }
+            }
+        });
+
+        heartRateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked ) {
+                if( isChecked )
+                {
+                    startHRListener();
+                }
+                else
+                {
+                    stopHRListener();
+                }
+            }
+        });
+
+        pedoemeterSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked ) {
+                if( isChecked )
+                {
+                    startPedometerListener();
+                }
+                else
+                {
+                    stopPedometerListener();
+                }
+            }
+        });
+
+        distanceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked ) {
+                if( isChecked )
+                {
+                    startDistanceListener();
+                }
+                else
+                {
+                    stopDistanceListener();
+                }
+            }
+        });
+
+        accelerometerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked ) {
+                if( isChecked )
+                {
+                    startAccelerometerListener();
+                }
+                else
+                {
+                    stopAccelerometerListener();
+                }
+            }
+        });
+
+        gyroscopeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked ) {
+                if( isChecked )
+                {
+                    startGyroscopeListener();
+                }
+                else
+                {
+                    stopGyroscopeListener();
+                }
+            }
+        });
+
+        contactSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked ) {
+                if( isChecked )
+                {
+                    startContactListener();
+                }
+                else
+                {
+                    stopContactListener();
+                }
+            }
+        });
+
+        caloriesSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked ) {
+                if( isChecked )
+                {
+                    startCaloriesListener();
+                }
+                else
+                {
+                    startCaloriesListener();
+                }
+            }
+        });
+
+        gsrSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked ) {
+                if( isChecked )
+                {
+                    startGsrListener();
+                }
+                else
+                {
+                    stopGsrListener();
+                }
+            }
+        });
+
+        altimeterSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked ) {
+                if( isChecked )
+                {
+                    startAltimeterListener();
+                }
+                else
+                {
+                    stopAltimeterListener();
+                }
+            }
+        });
+
+        ambientLightSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked ) {
+                if( isChecked )
+                {
+                    startAccelerometerListener();
+                }
+                else
+                {
+                    stopAccelerometerListener();
+                }
+            }
+        });
+
+        baroemterSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked ) {
+                if( isChecked )
+                {
+                    startBarometerListener();
+                }
+                else
+                {
+                    stopBarometerListener();
+                }
+            }
+        });
+
+        rrInteralSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked ) {
+                if( isChecked )
+                {
+                    startRRIntervalListener();
+                }
+                else
+                {
+                    stopRRIntervalListener();
+                }
+            }
+        });
         return rootView;
     }
 
@@ -245,7 +474,7 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
         if( bandClient != null )
         {
             stopHRListener();
-            stopSkinListener();
+            stopSkinTemperatureListener();
             stopUVListener();
             stopCaloriesListener();
 
@@ -275,7 +504,7 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
         if( bandClient != null )
         {
             stopHRListener();
-            stopSkinListener();
+            stopSkinTemperatureListener();
             stopUVListener();
             stopCaloriesListener();
 
@@ -464,7 +693,7 @@ public class RetrievePersonalHealthInformationFragment extends Fragment {
         }
     }
 
-    public void stopSkinListener()
+    public void stopSkinTemperatureListener()
     {
         try
         {
