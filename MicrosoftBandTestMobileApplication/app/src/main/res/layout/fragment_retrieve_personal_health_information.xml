@@ -27,16 +27,20 @@ android:id="@+id/scrollView" >
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Sensors Data"
-                    android:id="@+id/sensorDataTextView" />
+                    android:id="@+id/sensorDataTextView"
+                    android:layout_span="3" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"></TableRow>
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/uvSwitch"
+                    android:checked="true" />
 
                 <TextView
                     android:layout_width="fill_parent"
@@ -60,6 +64,12 @@ android:id="@+id/scrollView" >
                 android:layout_height="match_parent"
                 >
 
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/skinTemperatureSwitch"
+                    android:checked="true" />
+
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -71,12 +81,19 @@ android:id="@+id/scrollView" >
                     android:layout_height="fill_parent"
                     android:id="@+id/skinTemperature"
                     android:layout_gravity="bottom" />
+
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 >
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/heartRateSwitch"
+                    android:checked="true" />
 
                 <TextView
                     android:layout_width="fill_parent"
@@ -98,7 +115,7 @@ android:id="@+id/scrollView" >
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <com.jjoe64.graphview.GraphView
-                    android:layout_span="2"
+                    android:layout_span="3"
                     android:layout_width="match_parent"
                     android:layout_height="200dip"
                     android:id="@+id/graph"
@@ -108,6 +125,12 @@ android:id="@+id/scrollView" >
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pedometerSwitch"
+                    android:checked="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -126,6 +149,12 @@ android:id="@+id/scrollView" >
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/distanceSwitch"
+                    android:checked="true" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -142,6 +171,12 @@ android:id="@+id/scrollView" >
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/accelerometerSwitch"
+                    android:checked="true" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -157,6 +192,12 @@ android:id="@+id/scrollView" >
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gyroscopeSwitch"
+                    android:checked="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -175,6 +216,12 @@ android:id="@+id/scrollView" >
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/contactSwitch"
+                    android:checked="true" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -185,6 +232,7 @@ android:id="@+id/scrollView" >
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/contact" />
+
             </TableRow>
 
             <TableRow
@@ -205,6 +253,12 @@ android:id="@+id/scrollView" >
                     android:layout_gravity="bottom" />-->
 
 
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/caloriesSwitch"
+                    android:checked="true" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -222,6 +276,12 @@ android:id="@+id/scrollView" >
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gsrSwitch"
+                    android:checked="true" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -232,11 +292,18 @@ android:id="@+id/scrollView" >
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/gsr" />
+
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/altimeterSwitch"
+                    android:checked="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -254,6 +321,12 @@ android:id="@+id/scrollView" >
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ambientLightSwitch"
+                    android:checked="true" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -270,6 +343,12 @@ android:id="@+id/scrollView" >
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/barometerSwitch"
+                    android:checked="true" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -285,6 +364,12 @@ android:id="@+id/scrollView" >
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rrIntervalSwitch"
+                    android:checked="true" />
 
                 <TextView
                     android:layout_width="wrap_content"
